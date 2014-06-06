@@ -3,19 +3,27 @@
 $addr = $_POST['url'];
 $req_id = $_GET['id'];
 $request = false;
+
+
 if ($req_id != "") {
     $request = true;
+    foreach ($_GET as $key => $value) {
+        if (strstr($key, "input_")) {
+            $input_names = explode("_", $key);
+            $input[$input_names[1]] = $value;
+        }
+    }
+} else {
+    $input = ['n1' => 2, 'n2' => 3];
 }
-$input = ['n1' => 2, 'n2' => 3];
 //print $addr."\n";
-
 //print $function."\n";
 //$ex = exec("php -r '$function'");
 $directory = "/var/www/html/functions";
 if ($request) {
-    $FileName = $req_id. ".txt";
+    $FileName = $req_id . ".txt";
     $FileHandle = fopen($directory . "/" . $FileName, 'r') or die("can't open file");
-    $addr=fgets($FileHandle);
+    $addr = fgets($FileHandle);
 }
 $function = file_get_contents($addr);
 eval($function);
